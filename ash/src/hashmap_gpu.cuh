@@ -361,14 +361,14 @@ void HashMapGPUImpl<Key, Hash, Eq>::clear() {
 template <typename Key>
 struct IndexExtractor {
     __host__ __device__ int64_t
-    operator()(const thrust::pair<Key, int>& x) const {
+    operator()(const stdgpu::pair<const Key, int>& x) const {
         return int64_t(x.second);
     }
 };
 
 template <typename Key>
 struct KeyExtractor {
-    __host__ __device__ Key operator()(const thrust::pair<Key, int>& x) const {
+    __host__ __device__ Key operator()(const stdgpu::pair<const Key, int>& x) const {
         return x.first;
     }
 };

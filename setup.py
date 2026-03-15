@@ -31,6 +31,7 @@ cmake_flags = [
     "-DSTDGPU_BUILD_SHARED_LIBS=OFF",
     "-DSTDGPU_BUILD_EXAMPLES=OFF",
     "-DSTDGPU_BUILD_TESTS=OFF",
+    "-DSTDGPU_BUILD_BENCHMARKS=OFF",
     "-DCMAKE_POSITION_INDEPENDENT_CODE=ON",
 ]
 
@@ -39,7 +40,7 @@ subprocess.run(["cmake", "-S", stdgpu_dir, "-B", stdgpu_build_dir] + cmake_flags
 subprocess.run(["cmake", "--build", stdgpu_build_dir, "-t", "install"])
 
 include_dirs.append(osp.join(stdgpu_install_dir, "include/"))
-library_dirs = [osp.join(stdgpu_install_dir, "lib")]
+library_dirs = [osp.join(stdgpu_install_dir, "lib"), osp.join(stdgpu_install_dir, "lib64")]
 libraries = ["stdgpu"]
 
 # From PyTorch3D

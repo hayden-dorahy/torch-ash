@@ -29,14 +29,26 @@ Note for a more user-friendly interface and further extensions, I have fully rew
 
 
 ## Install
+
 First, install [PyTorch](https://pytorch.org/get-started/locally/).
 Optionally install [nerfacc](https://pypi.org/project/nerfacc/0.2.1/) for volume rendering.
 
-cmake is required in the conda environment for compiling the source code.
-```
-git clone --recursive git@github.com:theNded/torch-ash.git
+cmake is required for compiling the source code.
+
+```bash
+git clone --recursive git@github.com:hayden-dorahy/torch-ash.git
 pip install . --verbose
 ```
+
+### Modern stacks (CUDA 12.x, GCC 14, PyTorch 2.10+)
+
+The upstream build requires several patches to work on modern toolchains.
+See [BUILDING.md](BUILDING.md) for step-by-step instructions covering:
+
+- CUDA 12.8 + Thrust 2.x compatibility fixes
+- GCC 14 via Red Hat gcc-toolset
+- stdgpu submodule update
+- Missing `einops` runtime dependency
 
 ## Engine (ASH)
 - The core is `ASHEngine`, a PyTorch module implementing a parallel, collision-free, dynamic hash map from coordinates (`torch.IntTensor`) to indices (`torch.LongTensor`). It depends on [stdgpu](https://github.com/stotko/stdgpu).
