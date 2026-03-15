@@ -1,6 +1,85 @@
-# Building torch-ash on CUDA 12.x / GCC 14 (ml1)
+# Building torch-ash
 
-This documents the patches required to build torch-ash on a modern stack.
+---
+
+## Building on CUDA 13.x / Ubuntu 22.04 / GCC 11
+
+Tested on:
+
+- Ubuntu 22.04
+- CUDA 13.0 at `/usr/local/cuda-13`
+- GCC 11 (system default)
+- PyTorch 2.10+cu130
+- Python 3.11
+- `uv` package manager
+
+> **Note:** All source-level patches (Thrust cmake regex, `setup.py` flags,
+> `hashmap_gpu.cuh` API update) are already committed to this repo. No manual
+> file edits are needed on a fresh clone.
+
+---
+
+### Step 1 - Clone with submodules
+
+```bash
+git clone --recursive git@github.com:hayden-dorahy/torch-ash.git
+cd torch-ash
+```
+
+If already cloned without `--recursive`:
+
+```bash
+git submodule update --init --recursive
+```
+
+### Step 2 - Create a virtual environment
+
+```bash
+uv venv --python 3.11
+```
+
+### Step 3 - Install PyTorch for CUDA 13
+
+```bash
+uv pip install torch --index-url https://download.pytorch.org/whl/cu130 --python .venv/bin/python
+```
+
+### Step 4 - Install build tools
+
+```bash
+uv pip install cmake ninja setuptools --python .venv/bin/python
+```
+
+### Step 5 - Build and install
+
+```bash
+export PATH=$(pwd)/.venv/bin:/usr/local/cuda-13/bin:$PATH
+export CUDA_HOME=/usr/local/cuda-13
+
+uv pip install . --no-build-isolation --python .venv/bin/python
+```
+
+The build takes around 4-6 minutes.
+
+### Step 6 - Install runtime dependencies
+
+```bash
+uv pip install einops numpy --python .venv/bin/python
+```
+
+### Verification
+
+```bash
+.venv/bin/python -c "import ash; from ash import ASHEngine; print('ok')"
+```
+
+---
+
+## Building on CUDA 12.x / GCC 14 / RHEL 8
+
+This documents the patches required to build torch-ash on a modern stack
+(RHEL 8, CUDA 12.8, GCC 14). If you have CUDA 13 / Ubuntu, see the section above.
+
 Tested on:
 
 - RHEL 8.10
